@@ -26,7 +26,8 @@ GPIO.setup(40, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 class ImageDisplay(tk.Tk):
     def __init__(self, **kwargs):
         tk.Tk.__init__(self, **kwargs)
-        self.geometry('200x200')
+        #self.geometry('2000x2000')
+	self.attributes("-fullscreen", True) 
         self.wm_attributes('-type', 'splash') # no title bar
         self.attributes('-zoomed', True) # fullscreen
         self.window = tk.Label(self, bg='black')
@@ -36,7 +37,8 @@ class ImageDisplay(tk.Tk):
         self.cache = {"pic.png":""}
         for filename in glob('/home/pi/Pictures/*.png'):
             _, name = os.path.split(filename)
-            self.cache[name] = ImageTk.PhotoImage(Image.open(filename))
+            img = Image.open(filename).resize((1920, 1080))
+            self.cache[name] = ImageTk.PhotoImage(img)
         # ~ print(self.cache) #  debug: uncomment to print all loaded images
         self.current = '' # keep track of currently loaded image
 
