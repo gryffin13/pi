@@ -11,6 +11,9 @@ from glob import glob
 from datetime import datetime
 from datetime import timedelta
 from pirc522 import RFID
+
+from image import get_images
+
 uid1 = [61,186,177,115,69] #blue tag #1
 uid2 = [174,17,68,32,219] # white tag #1
 uid3 = [27,146,74,13,206] #blue tag #2
@@ -58,23 +61,20 @@ i=0
 n=1
 q=1
 j=0
+
 class ImageDisplay(tk.Tk):
     def __init__(self, **kwargs):
         tk.Tk.__init__(self, **kwargs)
         #self.geometry('2000x2000')
-	self.attributes("-fullscreen", True)
+        self.attributes("-fullscreen", True)
         self.wm_attributes('-type', 'splash') # no title bar
         self.attributes('-zoomed', True) # fullscreen
         self.window = tk.Label(self, bg='black')
         self.window.pack(fill=tk.BOTH, expand=True)
 
         # preload all images
-        self.cache = {"pic.png":""}
-        for filename in glob('/home/pi/Pictures/*.png'):
-            _, name = os.path.split(filename)
-            img = Image.open(filename).resize((1920, 1080))
-            self.cache[name] = ImageTk.PhotoImage(img)
-        # ~ print(self.cache) #  debug: uncomment to print all loaded images
+        self.cache = get_images()
+
         self.current = '' # keep track of currently loaded image
 
     def load_image(self, *args):
